@@ -84,7 +84,7 @@ async def aggregate_salaries(dt_from, dt_upto, group_type):
     if result:
         # Преобразуем результат в нужный формат
         dataset = [entry["total_salaries"] for entry in result]
-        labels = [entry["_id"]["$dateToString"] for entry in result]
+        labels = [datetime.strptime(entry["_id"], "%Y-%m-%d %H").strftime("%Y-%m-%dT%H:%M:%S") for entry in result]
         return json.dumps({"dataset": dataset, "labels": labels})
     else:
         return "Нет данных за указанный период"
