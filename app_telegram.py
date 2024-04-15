@@ -7,13 +7,13 @@ from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 import logging
 
-#Параметры подключения MongoDB
+# Параметры для подключения MongoDB
 MONGODB_URL = "mongodb://localhost:27017"
 DB_NAME = "sampleDB"
 COLLECTION_NAME = "sample_collection"
 
 # Параметры для телеграм бота
-API_TOKEN = 'YOUR TELEGRAM API'
+API_TOKEN = 'YOUR API'
 
 # Настройка логгирования
 logging.basicConfig(level=logging.INFO)
@@ -36,9 +36,8 @@ async def start(message: types.Message):
                         Пример запроса: {"dt_from": "2022-09-01T00:00:00", "dt_upto": "2022-12-31T23:59:00",
                          "group_type": "month"}"""
                         )
-
 @dp.message()
-async def process_json(message: types.Message, state: FSMContext):
+async def process_json(message: types.Message):
     try:
         json_data = message.text
         parsed_data = json.loads(json_data)
@@ -89,7 +88,6 @@ async def aggregate_salaries(dt_from, dt_upto, group_type):
         return json.dumps({"dataset": dataset, "labels": labels})
     else:
         return "Нет данных за указанный период"
-
 
 async def check_mongodb_connection():
     try:
