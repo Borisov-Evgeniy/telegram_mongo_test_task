@@ -1,5 +1,12 @@
 import asyncio
 from aiogram.filters import Command
+
+#Параметры подключения MongoDB
+MONGODB_URL = "mongodb://localhost:27017"
+DB_NAME = "sampleDB"
+COLLECTION_NAME = "sample_collection"
+
+
 @dp.message(Command("start"))
 async def start(message: types.Message):
     await message.reply("""Привет! Для агрегации данных отправь JSON с датой начала
@@ -8,3 +15,15 @@ async def start(message: types.Message):
                          "group_type": "month"}"""
                         )
 
+
+async def check_mongodb_connection():
+    try:
+        client = AsyncIOMotorClient("mongodb://localhost:27017")
+        await client.admin.command('ping')
+        print("Сервер MongoDB доступен")
+    except Exception as e:
+        print(f"Ошибка при подключении к MongoDB: {e}")
+
+if __name__ == '__main__':
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(check_mongodb_connection())
